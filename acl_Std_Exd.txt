@@ -1,0 +1,131 @@
+:::::::::::::::::::::::::::::::::Standard ACL:::::::::::::::::::::::::::::::::::::::::::::
+------------------------------------------------------------------------------------------
+Service router
+-------------------------------------------------------------------------------------------
+
+Router>en
+Router#conf t
+Router(config)#hostname Service
+Router(config)#int g 0/0
+Router(config-if)#ip add 20.20.20.2 255.255.255.252
+Router(config-if)#no sh
+
+Router(config-if)#int g 0/1
+Router(config-if)#ip add 30.30.30.1 255.255.255.252
+Router(config-if)#no sh
+Router(config-if)#exit
+---------------------------------------------------------------------------------------
+Service(config)#!Default Router
+Service(config)#ip route 0.0.0.0 0.0.0.0 g0/0
+----------------------------------------------------------------------------------------
+Service(config-if)#access-list 11 deny 192.168.10.3 0.0.0.0
+Service(config)#access-list 11 per
+Service(config)#!Standard ACL apply for 192.168.10.3 ip not to reach 30.30.30.0/30 ips
+Service(config)#do sh ac
+Standard IP access list 11
+    10 deny host 192.168.10.3 (4 match(es))
+
+Service(config)#int gigabitEthernet 0/0
+Service(config-if)#ip access-group 11 in
+
+
+Service(config)#do wr
+
+==============================================================================================
+----------------------------------------------------------------------------------------------
+IT router
+----------------------------------------------------------------------------------------------
+==============================================================================================
+Router>en
+Router#conf t
+Router(config)#hostname IT
+IT(config)#int g 0/0
+IT(config-if)#ip add 20.20.20.1 255.255.255.252
+IT(config-if)#no sh
+
+IT(config-if)#ip add 192.168.10.1 255.255.255.0
+IT(config-if)#no sh
+IT(config-if)#exit
+---------------------------------------------------------
+
+IT(config)#ip dhcp pool IT
+IT(dhcp-config)#network 192.168.10.0 255.255.255.0
+IT(dhcp-config)#default-router 192.168.10.1
+IT(dhcp-config)#dns-server 8.8.8.8
+IT(dhcp-config)#exit
+IT(config)#ip route 0.0.0.0 0.0.0.0 g0/0
+IT(config)#do wr
+=============================================================================================
+--------------------------------------------------------------------------------------------
+:::::::::::::::::::::::::::::::::Extanded ACL:::::::::::::::::::::::::::::::::::::::::::::
+--------------------------------------------------------------------------------------------
+IT_2 (nearest to host)-
+---------------------------------------------------------------------------------------------
+==============================================================================================
+Router>en
+Router#conf t
+Router(config)#hostname IT_2
+IT_2(config)#int g 0/0
+IT_2(config-if)#ip add 40.40.40.1 255.255.255.252
+IT_2(config-if)#no sh
+
+IT_2(config-if)##int g 0/1
+IT_2(config-if)#ip add 192.168.20.1 255.255.255.0
+IT_2(config-if)#no sh
+IT_2(config-if)#exit
+--------------------------------------------------------------------------------------
+IT_2(config)#ip dhcp pool IT_2
+IT_2(dhcp-config)#network 192.168.20.0 255.255.255.0
+IT_2(dhcp-config)#default-router 192.168.20.1
+IT_2(dhcp-config)#dns-server 8.8.8.8
+IT_2(dhcp-config)#exit
+---------------------------------------------------------------------------------------
+IT_2(config)#ip route 0.0.0.0 0.0.0.0 g0/0  
+---------------------------------------------------------------------------------------
+Extanded acl configuration:
+----------------------------
+IT_2(config)#!deny access to ping of 192.168.20.3
+IT_2(config)#access-list 111 deny icmp 192.168.20.3 0.0.0.0 50.50.50.2 0.0.0.0 echo
+IT_2(config)#!deny access to browsing of 192.168.20.2
+IT_2(config)#access-list 111 deny tcp 192.168.20.2 0.0.0.0 50.50.50.2 0.0.0.0 eq www
+IT_2(config)#do sh ac
+Extended IP access list 111
+    10 deny icmp host 192.168.20.3 host 50.50.50.2 echo
+    20 deny tcp host 192.168.20.2 host 50.50.50.2 eq www
+
+IT_2(config)#int g0/1
+IT_2(config-if)#ip access-group 111 in
+IT_2(config-if)#exit
+IT_2(config)#!permit access to others
+IT_2(config)#ip access-list extended 111
+IT_2(config-ext-nacl)#21 permit ip any any
+IT_2(config-ext-nacl)#exit
+IT_2(config)#do sh ac
+Extended IP access list 111
+    10 deny icmp host 192.168.20.3 host 50.50.50.2 echo (4 match(es))
+    20 deny tcp host 192.168.20.2 host 50.50.50.2 eq www (43 match(es))
+    21 permit ip any any
+
+IT_2(config)#do wr
+=====================================================================================
+-------------------------------------------------------------------------------------
+Service_2
+-------------------------------------------------------------------------------------
+======================================================================================
+Router>en
+Router#conf t
+Router(config)#host
+Router(config)#hostname Service_2
+Service_2(config)#int g 0/0
+Service_2(config-if)#ip add 40.40.40.2 255.255.255.252
+Service_2(config-if)#no sh
+Service_2(config-if)#int g 0/1
+Service_2(config-if)#ip add 50.50.50.1 255.255.255.252
+Service_2(config-if)#no sh
+Service_2(config-if)#exit
+-------------------------------------------------------------------------------------------
+Service_2(config)#ip route 0.0.0.0 0.0.0.0 g0/0
+Service_2(config)#do wr
+
+
+
