@@ -1,0 +1,182 @@
+s1
+-------------------
+Switch>
+Switch>
+Switch>en
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hos
+Switch(config)#hostname S1
+S1(config)#vlan
+S1(config)#vlan 10
+S1(config-vlan)#name IT
+S1(config-vlan)#exit
+S1(config)#vlan 20
+S1(config-vlan)#name HR
+S1(config-vlan)#exit
+S1(config)#int r f 0/7-8
+S1(config-if-range)#sw mo acc
+S1(config-if-range)#sw acc vla
+S1(config-if-range)#sw acc vlan 10
+S1(config-if-range)#exit
+S1(config)#int r f 0/9-10
+S1(config-if-range)#sw mo acc
+S1(config-if-range)#sw acc vla
+S1(config-if-range)#sw acc vlan 20
+S1(config-if-range)#exit
+
+S1(config)#!!!!!!!!Ether Channel!!!!!!!!!!!!!!!!!
+S1(config)#int r f 0/1-3
+S1(config-if-range)#channel-group 1 mode active !!!!LACP!!!!!!!!
+S1(config-if-range)#no sh
+S1(config-if-range)#exit
+S1(config)#int port-channel 1
+S1(config-if)#sw mo tr
+S1(config-if)#exit
+
+S1(config)#int r f 0/4-6
+S1(config-if-range)#channel-group 3 mode desirable !!!!!!!PAgP!!!!!
+S1(config-if-range)#exit
+S1(config)#int port-channel 3
+S1(config-if)#sw mo tr
+S1(config-if)#exit
+
+S1#sh ether summ
+Flags:  D - down        P - in port-channel
+        I - stand-alone s - suspended
+        H - Hot-standby (LACP only)
+        R - Layer3      S - Layer2
+        U - in use      f - failed to allocate aggregator
+        u - unsuitable for bundling
+        w - waiting to be aggregated
+        d - default port
+
+
+Number of channel-groups in use: 2
+Number of aggregators:           2
+
+Group  Port-channel  Protocol    Ports
+------+-------------+-----------+----------------------------------------------
+
+1      Po1(SU)           LACP   Fa0/1(P) Fa0/2(P) Fa0/3(P) 
+3      Po3(SU)           PAgP   Fa0/4(P) Fa0/5(P) Fa0/6(P) 
+S1#
+
+----------------------------------------------------------------------------------------------
+S2
+-----------------------------
+Switch>en
+Switch#conf t
+Switch(config)#hostname S2
+
+S2(config)#vlan 10
+S2(config-vlan)#name IT
+S2(config-vlan)#exi
+S2(config)#vlan 20
+S2(config-vlan)#name HR
+S2(config-vlan)#exi
+
+S2(config)#int r f 0/7-8
+S2(config-if-range)#sw mo acc
+S2(config-if-range)#sw acc vla
+S2(config-if-range)#sw acc vlan 10
+S2(config-if-range)#exit
+S2(config)#int r f 0/9-10
+S2(config-if-range)#sw mo acc
+S2(config-if-range)#sw acc val
+S2(config-if-range)#sw acc vl
+S2(config-if-range)#sw acc vlan 20
+S2(config-if-range)#exit
+
+S2(config)#!!!!!!!!Ether Channel!!!!!!!!!!!!!!!!!
+S2(config)#int r f 0/1-3
+S2(config-if-range)#channel-group 1 mode passive !!!LACP!!!
+S2(config-if-range)#
+Creating a port-channel interface Port-channel 1
+S2(config-if-range)#exit
+S2(config)#int port-channel 1
+S2(config-if)#sw mo tr
+S2(config-if)#exit
+S2#sh etherchannel summary 
+Flags:  D - down        P - in port-channel
+        I - stand-alone s - suspended
+        H - Hot-standby (LACP only)
+        R - Layer3      S - Layer2
+        U - in use      f - failed to allocate aggregator
+        u - unsuitable for bundling
+        w - waiting to be aggregated
+        d - default port
+
+
+Number of channel-groups in use: 1
+Number of aggregators:           1
+
+Group  Port-channel  Protocol    Ports
+------+-------------+-----------+----------------------------------------------
+
+1      Po1(SU)           LACP   Fa0/1(P) Fa0/2(P) Fa0/3(P) 
+S2#
+
+S2(config)#int r f 0/4-6
+S2(config-if-range)#channel-group 2 mode active !!!LACP!!!
+S2(config-if-range)#no sh
+S2(config-if-range)#exit
+S2(config)#int port-channel 2
+S2(config-if)#sw mo tr
+
+---------------------------------------------------------------------------------------
+S3
+-----------
+Switch>en
+Switch#conf t
+Switch(config)#hostname S3
+S3(config)#vlan 10
+S3(config-vlan)#name IT
+S3(config)#vlan 20
+S3(config-vlan)#name HR
+S3(config-vlan)#exit
+
+S3(config)#int r f 0/7-8
+S3(config-if-range)#sw mo acc
+S3(config-if-range)#sw acc vlan 10
+S3(config-if-range)#exit
+S3(config)#int r f 0/9-10
+S3(config-if-range)#sw mo acc
+S3(config-if-range)#sw acc vlan 20
+S3(config-if-range)#exit
+
+S3(config)#!!!!!!!!Ether Channel!!!!!!!!!!!!!!!!!
+S3(config)#int r f 0/1-3
+S3(config-if-range)#channel-group 2 mode passive 
+S3(config-if-range)#no sh
+S3(config-if-range)#exit
+S3(config)#int port-channel 2
+S3(config-if)#sw mo tr
+S3(config-if)#exit
+S3(config)#int r f 0/4-6
+S3(config-if-range)#channel-group 3 mode desirable !!!!!!PAgP!!!
+S3(config-if-range)#no sh
+S3(config-if-range)#exit
+S3(config)#int port-channel 3
+S3(config-if)#sw mo tr
+S3(config-if)#exit
+S3#sh ether summ
+Flags:  D - down        P - in port-channel
+        I - stand-alone s - suspended
+        H - Hot-standby (LACP only)
+        R - Layer3      S - Layer2
+        U - in use      f - failed to allocate aggregator
+        u - unsuitable for bundling
+        w - waiting to be aggregated
+        d - default port
+
+
+Number of channel-groups in use: 2
+Number of aggregators:           2
+
+Group  Port-channel  Protocol    Ports
+------+-------------+-----------+----------------------------------------------
+
+2      Po2(SU)           LACP   Fa0/1(P) Fa0/2(P) Fa0/3(P) 
+3      Po3(SU)           PAgP   Fa0/4(P) Fa0/5(P) Fa0/6(P) 
+
