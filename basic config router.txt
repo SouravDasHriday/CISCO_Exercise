@@ -1,0 +1,28 @@
+
+Router>enable
+Router#configure terminal 
+Router(config)#hostname cisco
+cisco(config)#banner motd ###Unauthorized Access Prohibited###
+cisco(config)#!set password in privilege mode!
+cisco(config)#enable password cisco
+cisco(config)#!make all password enctripted!
+cisco(config)#service password-encryption 
+cisco(config)#line console 0
+cisco(config-line)#exec-timeout 2 0
+cisco(config-line)#!2=min 0=sec!
+cisco(config-line)#password cisco
+cisco(config-line)#logging synchronous 
+cisco(config-line)#exit
+cisco(config)#
+cisco(config)#line vty 0 15
+cisco(config-line)#password cisco
+cisco(config-line)#login
+cisco(config-line)#exec-timeout 2 0
+cisco(config-line)#loggin synchronous 
+cisco(config-line)#exit
+cisco(config)#!Prevent brute force attack 180=block time in sec , 3=attemps, 50=within 50sec!
+cisco(config)#login block-for 180 attempts 3 within 50
+cisco(config)#no ip domain-lookup
+cisco(config)#clock set 10:30:00 Jan 15 2024
+cisco(config)#cisco(config)#do write
+cisco(config)#do sh runn
