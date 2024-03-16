@@ -1,0 +1,67 @@
+Sat Mar 16 09:59:46 2024   Switch0   Switch>en
+Sat Mar 16 09:59:48 2024   Switch0   Switch#conf t
+Sat Mar 16 10:05:23 2024   Switch_Server   Switch_Server(config)#vtp mode server
+Sat Mar 16 10:05:43 2024   Switch_Server   Switch_Server(config)#vtp domain cisco.com
+Sat Mar 16 10:05:59 2024   Switch_Server   Switch_Server(config)#vtp password cisco
+Sat Mar 16 10:06:09 2024   Switch_Server   Switch_Server(config)#vtp version 2
+Sat Mar 16 10:07:12 2024   Switch_Client_1   Switch_Client_1(config)#vtp mode client
+Sat Mar 16 10:07:12 2024   Switch_Client_1   Switch_Client_1(config)#vtp domain cisco.com
+Sat Mar 16 10:07:12 2024   Switch_Client_1   Switch_Client_1(config)#vtp password cisco
+Sat Mar 16 10:07:14 2024   Switch_Client_1   Switch_Client_1(config)#vtp version 2
+Sat Mar 16 10:07:20 2024   Switch_Client_2   Switch_Client_2(config)#vtp mode client
+Sat Mar 16 10:07:20 2024   Switch_Client_2   Switch_Client_2(config)#vtp domain cisco.com
+Sat Mar 16 10:07:20 2024   Switch_Client_2   Switch_Client_2(config)#vtp password cisco
+Sat Mar 16 10:07:21 2024   Switch_Client_2   Switch_Client_2(config)#vtp version 2
+Sat Mar 16 10:07:29 2024   Switch_Client_3   Switch_Client_3(config)#vtp mode client
+Sat Mar 16 10:07:29 2024   Switch_Client_3   Switch_Client_3(config)#vtp domain cisco.com
+Sat Mar 16 10:07:29 2024   Switch_Client_3   Switch_Client_3(config)#vtp password cisco
+Sat Mar 16 10:07:30 2024   Switch_Client_3   Switch_Client_3(config)#vtp version 2
+Sat Mar 16 10:07:36 2024   Switch_Client_4   Switch_Client_4(config)#vtp mode client
+Sat Mar 16 10:07:36 2024   Switch_Client_4   Switch_Client_4(config)#vtp domain cisco.com
+Sat Mar 16 10:07:36 2024   Switch_Client_4   Switch_Client_4(config)#vtp password cisco
+Sat Mar 16 10:07:38 2024   Switch_Client_4   Switch_Client_4(config)#vtp version 2
+Sat Mar 16 10:07:45 2024   Switch_Client_4   Switch_Client_4(config)#do wr
+Sat Mar 16 10:07:51 2024   Switch_Client_3   Switch_Client_3(config)#do wr
+Sat Mar 16 10:07:57 2024   Switch_Client_2   Switch_Client_2(config)#do wr
+Sat Mar 16 10:08:03 2024   Switch_Client_1   Switch_Client_1(config)#do wr
+Sat Mar 16 10:08:18 2024   Switch_Server   Switch_Server#conf t
+Sat Mar 16 10:08:20 2024   Switch_Server   Switch_Server(config)#do wr
+Sat Mar 16 10:08:28 2024   Switch_Server   Switch_Server(config)#exit
+Sat Mar 16 10:08:36 2024   Switch_Server   Switch_Server#sh vlan brief 
+Sat Mar 16 10:08:46 2024   Switch_Client_1   Switch_Client_1(config)#exit
+Sat Mar 16 10:08:52 2024   Switch_Client_1   Switch_Client_1#sh vlan br
+Sat Mar 16 10:08:58 2024   Switch_Server   Switch_Server#conf t
+Sat Mar 16 10:09:10 2024   Switch_Server   Switch_Server(config)#vlan 10
+Sat Mar 16 10:09:13 2024   Switch_Server   Switch_Server(config-vlan)#name IT
+Sat Mar 16 10:09:15 2024   Switch_Server   Switch_Server(config-vlan)#exit
+Sat Mar 16 10:09:20 2024   Switch_Server   Switch_Server(config)#vlan 20
+Sat Mar 16 10:09:26 2024   Switch_Server   Switch_Server(config-vlan)#name IT2
+Sat Mar 16 10:09:30 2024   Switch_Server   Switch_Server(config-vlan)#exit
+Sat Mar 16 10:09:33 2024   Switch_Server   Switch_Server(config)#vlan 30
+Sat Mar 16 10:09:37 2024   Switch_Server   Switch_Server(config-vlan)#name IT3
+Sat Mar 16 10:09:40 2024   Switch_Server   Switch_Server(config-vlan)#exit
+Sat Mar 16 10:09:44 2024   Switch_Server   Switch_Server(config)#vlan 40
+Sat Mar 16 10:09:47 2024   Switch_Server   Switch_Server(config-vlan)#name IT4
+Sat Mar 16 10:09:49 2024   Switch_Server   Switch_Server(config-vlan)#exit
+Sat Mar 16 10:09:53 2024   Switch_Server   Switch_Server(config)#vlan 50
+Sat Mar 16 10:09:57 2024   Switch_Server   Switch_Server(config-vlan)#name IT5
+Sat Mar 16 10:09:58 2024   Switch_Server   Switch_Server(config-vlan)#exit
+Sat Mar 16 10:10:05 2024   Switch_Server   Switch_Server(config)#do sh vlan br
+Sat Mar 16 10:10:12 2024   Switch_Server   Switch_Server(config)#do wr
+Sat Mar 16 10:10:17 2024   Switch_Client_1   Switch_Client_1#sh vlan br
+Sat Mar 16 10:10:24 2024   Switch_Client_1   Switch_Client_1#sh vlan br
+Sat Mar 16 10:11:43 2024   Switch_Server   Switch_Server(config)#int r f 0/1-2
+Sat Mar 16 10:11:48 2024   Switch_Server   Switch_Server(config-if-range)#sw mo tr
+Sat Mar 16 10:11:59 2024   Switch_Client_1   Switch_Client_1#conf t
+Sat Mar 16 10:12:06 2024   Switch_Client_1   Switch_Client_1(config)#int r f 0/1-2
+Sat Mar 16 10:12:11 2024   Switch_Client_1   Switch_Client_1(config-if-range)#sw mo tr
+Sat Mar 16 10:12:22 2024   Switch_Client_2   Switch_Client_2(config)#int r f 0/1-2
+Sat Mar 16 10:12:25 2024   Switch_Client_2   Switch_Client_2(config-if-range)#sw mo tr
+Sat Mar 16 10:12:35 2024   Switch_Client_3   Switch_Client_3(config)#int r f 0/1-3
+Sat Mar 16 10:12:38 2024   Switch_Client_3   Switch_Client_3(config-if-range)#sw mo tr
+Sat Mar 16 10:12:48 2024   Switch_Client_4   Switch_Client_4(config)#int f 0/1
+Sat Mar 16 10:12:51 2024   Switch_Client_4   Switch_Client_4(config-if)#sw mo tr
+Sat Mar 16 10:13:09 2024   Switch_Client_1   Switch_Client_1(config-if-range)#exit
+Sat Mar 16 10:13:17 2024   Switch_Client_1   Switch_Client_1(config)#do sh vlan br
+Sat Mar 16 10:13:29 2024   Switch_Client_4   Switch_Client_4(config-if)#exit
+Sat Mar 16 10:13:37 2024   Switch_Client_4   Switch_Client_4(config)#do sh vlan br
