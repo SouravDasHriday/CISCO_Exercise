@@ -85,3 +85,92 @@ Wed Jan 24 11:03:08 2024   Router0   Router(config-ephone)#type 7960
 Wed Jan 24 11:03:26 2024   Router0   Router(config-ephone)#button 1:3
 Wed Jan 24 11:03:34 2024   Router0   Router(config-ephone)#exit
 Wed Jan 24 11:03:37 2024   Router0   Router(config)#do wr
+=======
+Wed Jan 24 10:40:44 2024   Switch0   Switch>en
+Wed Jan 24 10:40:46 2024   Switch0   Switch#conf t
+Wed Jan 24 10:46:39 2024   Switch0   Switch(config)#vlan 10
+Wed Jan 24 10:46:44 2024   Switch0   Switch(config-vlan)#name DATA
+Wed Jan 24 10:46:48 2024   Switch0   Switch(config-vlan)#vlan 20
+Wed Jan 24 10:46:54 2024   Switch0   Switch(config-vlan)#name VOICE
+Wed Jan 24 10:46:59 2024   Switch0   Switch(config-vlan)#vlan 30
+Wed Jan 24 10:47:25 2024   Switch0   Switch(config-vlan)#name MGT
+Wed Jan 24 10:47:30 2024   Switch0   Switch(config-vlan)#vlan 40
+Wed Jan 24 10:47:38 2024   Switch0   Switch(config-vlan)#name MISC
+Wed Jan 24 10:47:57 2024   Switch0   Switch(config-vlan)#exit
+
+Wed Jan 24 10:48:28 2024   Switch0   Switch(config)#int f 0/1
+Wed Jan 24 10:51:30 2024   Switch0   Switch(config-if)#switchport mode trunk 
+Wed Jan 24 10:51:45 2024   Switch0   Switch(config-if)#exit
+
+Wed Jan 24 10:51:52 2024   Switch0   Switch(config)#int r f 0/2-4
+Wed Jan 24 10:51:57 2024   Switch0   Switch(config-if-range)#sw mo acc
+Wed Jan 24 10:52:15 2024   Switch0   Switch(config-if-range)#sw access vlan 10
+Wed Jan 24 10:52:26 2024   Switch0   Switch(config-if-range)#sw voice vlan 20
+Wed Jan 24 10:52:42 2024   Switch0   Switch(config-if-range)#exit
+
+
+Wed Jan 24 10:53:04 2024   Switch0   Switch(config)#int r f 0/5-24
+Wed Jan 24 10:53:09 2024   Switch0   Switch(config-if-range)#sw mo acc
+Wed Jan 24 10:53:24 2024   Switch0   Switch(config-if-range)#sw access vlan 40
+Wed Jan 24 10:53:27 2024   Switch0   Switch(config-if-range)#sh
+Wed Jan 24 10:53:29 2024   Switch0   Switch(config-if-range)#exit
+Wed Jan 24 10:53:45 2024   Switch0   Switch(config)#int r gigabitEthernet 0/1-2
+Wed Jan 24 10:53:48 2024   Switch0   Switch(config-if-range)#sw mo acc
+Wed Jan 24 10:53:53 2024   Switch0   Switch(config-if-range)#sw access vlan 40
+Wed Jan 24 10:53:57 2024   Switch0   Switch(config-if-range)#exit
+Wed Jan 24 10:54:00 2024   Switch0   Switch(config)#do wr
+
+
+
+
+
+Wed Jan 24 10:35:24 2024   Router0   Router>enable
+Wed Jan 24 10:35:24 2024   Router0   Router#configure terminal
+Wed Jan 24 10:35:24 2024   Router0   Router(config)#interface FastEthernet0/0
+Wed Jan 24 10:35:26 2024   Router0   Router(config-if)#no shutdown
+Wed Jan 24 10:35:40 2024   Router0   Router(config-if)#exit
+Wed Jan 24 10:35:45 2024   Router0   Router(config)#int f 0/0
+Wed Jan 24 10:36:23 2024   Router0   Router(config-if)#int f 0/0.10
+Wed Jan 24 10:36:30 2024   Router0   Router(config-subif)#encapsulation dot1Q 10
+Wed Jan 24 10:36:42 2024   Router0   Router(config-subif)#ip address 192.168.10.1 255.255.255.0
+Wed Jan 24 10:36:47 2024   Router0   Router(config-subif)#int f 0/0.20
+Wed Jan 24 10:36:54 2024   Router0   Router(config-subif)#enc dot1Q 20
+Wed Jan 24 10:37:04 2024   Router0   Router(config-subif)#ip address 192.168.20.1 255.255.255.0
+Wed Jan 24 10:37:07 2024   Router0   Router(config-subif)#exit
+Wed Jan 24 10:37:47 2024   Router0   Router(config)#ip dhcp excluded-address 192.168.10.0 192.168.10.10
+Wed Jan 24 10:37:55 2024   Router0   Router(config)#ip dhcp excluded-address 192.168.20.0 192.168.20.10
+Wed Jan 24 10:38:27 2024   Router0   Router(config)#ip dhcp pool DATA
+Wed Jan 24 10:38:38 2024   Router0   Router(dhcp-config)#network 192.168.10.0 255.255.255.0
+Wed Jan 24 10:38:50 2024   Router0   Router(dhcp-config)#default-router 192.168.10.1
+Wed Jan 24 10:38:55 2024   Router0   Router(dhcp-config)#dns-server 8.8.8.8
+Wed Jan 24 10:38:58 2024   Router0   Router(dhcp-config)#exit
+Wed Jan 24 10:39:16 2024   Router0   Router(config)#ip dhcp pool VOICE
+Wed Jan 24 10:39:29 2024   Router0   Router(dhcp-config)#network 192.168.20.0 255.255.255.0
+Wed Jan 24 10:39:43 2024   Router0   Router(dhcp-config)#default-router 192.168.20.1
+Wed Jan 24 10:40:15 2024   Router0   Router(dhcp-config)#option 150 ip 192.168.20.1
+Wed Jan 24 10:40:17 2024   Router0   Router(dhcp-config)#exit
+
+Wed Jan 24 10:57:03 2024   Router0   Router(config)#telephony-service 
+Wed Jan 24 10:57:43 2024   Router0   Router(config-telephony)#max-dn 3
+Wed Jan 24 10:57:53 2024   Router0   Router(config-telephony)#max-ephones 3
+Wed Jan 24 10:58:13 2024   Router0   Router(config-telephony)#ip source-address 192.168.20.1 port 2000
+Wed Jan 24 10:59:01 2024   Router0   Router(config-telephony)#ephone-dn 1
+Wed Jan 24 10:59:08 2024   Router0   Router(config-ephone-dn)#number 1010
+Wed Jan 24 10:59:15 2024   Router0   Router(config-ephone-dn)#ephone-dn 2
+Wed Jan 24 10:59:27 2024   Router0   Router(config-ephone-dn)#number 1020
+Wed Jan 24 10:59:30 2024   Router0   Router(config-ephone-dn)#ephone-dn 3
+Wed Jan 24 10:59:35 2024   Router0   Router(config-ephone-dn)#number 1030
+Wed Jan 24 10:59:39 2024   Router0   Router(config-ephone-dn)#exit
+Wed Jan 24 11:01:14 2024   Router0   Router(config)#ephone 1
+Wed Jan 24 11:02:36 2024   Router0   Router(config-ephone)#type 7960
+Wed Jan 24 11:02:42 2024   Router0   Router(config-ephone)#button 1:1
+Wed Jan 24 11:02:48 2024   Router0   Router(config-ephone)#ephone 1
+Wed Jan 24 11:02:51 2024   Router0   Router(config-ephone)#ephone 2
+Wed Jan 24 11:02:55 2024   Router0   Router(config-ephone)#type 7960
+Wed Jan 24 11:02:59 2024   Router0   Router(config-ephone)#button 1:2
+Wed Jan 24 11:03:03 2024   Router0   Router(config-ephone)#ephone 3
+Wed Jan 24 11:03:08 2024   Router0   Router(config-ephone)#type 7960
+Wed Jan 24 11:03:26 2024   Router0   Router(config-ephone)#button 1:3
+Wed Jan 24 11:03:34 2024   Router0   Router(config-ephone)#exit
+Wed Jan 24 11:03:37 2024   Router0   Router(config)#do wr
+>>>>>>> 64aa56b4ab6022df20811b26cb7822129e9ec6c5
